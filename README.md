@@ -53,5 +53,5 @@ Please see the [associated wiki][wiki] for more details and examples.
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[wiki]: https://bitbucket.org/ram6ler/knn-cluster/wiki/Home
-[tracker]: https://bitbucket.org/ram6ler/knn-cluster/issues
+[wiki]: https://bitbucket.org/ram6ler/k_means_cluster/wiki/Home
+[tracker]: https://bitbucket.org/ram6ler/k_means_cluster/issues
