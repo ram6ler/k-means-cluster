@@ -8,7 +8,7 @@ import 'package:k_means_cluster/k_means_cluster.dart';
 main() async {
   // Load the data from iris.csv; ignore header-line;
   // each line representes an instance of an iris.
-  List<String> lines = (await new File("iris.csv").readAsLines()).sublist(1);
+  List<String> lines = (await File("iris.csv").readAsLines()).sublist(1);
 
   // Set the distance measure; this can be any function of the form
   // num f(List<num> a, List<num> b): a and b contain the coordinates
@@ -27,7 +27,7 @@ main() async {
     // The fifth column contains the species.
     String id = datum[4];
 
-    return new Instance(location, id: id);
+    return Instance(location, id: id);
   }).toList();
 
   // Randomly create the initial clusters.

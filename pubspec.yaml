@@ -1,12 +1,9 @@
 name: k_means_cluster
 description: A simple implementation of k-means clustering.
-version: 0.1.0
+version: 0.2.0
 homepage: https://bitbucket.org/ram6ler/knn-cluster/wiki/Home
 author: Richard Ambler <rambler@ibwya.net>
 
 environment:
-  sdk: '>=1.20.1 <2.0.0'
+  sdk: '>=2.0.0 <3.0.0'
 
-
-dev_dependencies:
-  test: ^0.12.0

@@ -6,7 +6,7 @@ A very simple implementation of k-means clustering.
 
 A clustering session typically involves:
 
-* Setting a distance measureme to use.
+* Setting a distance measurement to use.
 
 ```dart
 distanceMeasure = DistanceType.squaredEuclidian; // default
@@ -20,7 +20,7 @@ distanceMeasure = DistanceType.squaredEuclidian; // default
 List<Instance> instances = data.map((datum) {
   List<num> coordinates = ...;
   String id = ...;
-  return new Instance(coordinates, id: id); 
+  return Instance(coordinates, id: id); 
 }).tolist();
 ```
 

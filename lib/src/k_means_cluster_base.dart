@@ -1,7 +1,3 @@
-// Copyright (c) 2017, Richard Ambler. All rights reserved. Use of this
-// source code is governed by a BSD-style license that can be found in
-// the LICENSE file.
-
 import 'dart:math' show Random;
 
 /// A function that resurns a distance measure between two points [a]
@@ -12,10 +8,10 @@ typedef num DistanceMeasure(List<num> a, List<num> b);
 /// [DistanceMeasure] functions.
 abstract class DistanceType {
   static DistanceMeasure squaredEuclidian = (List<num> a, List<num> b) =>
-      new List<num>.generate(a.length, (i) => (a[i] - b[i]) * (a[i] - b[i]))
+      List<num>.generate(a.length, (i) => (a[i] - b[i]) * (a[i] - b[i]))
           .fold(0.0, (a, b) => a + b);
   static DistanceMeasure cityBlock = (List<num> a, List<num> b) =>
-      new List<num>.generate(a.length, (i) => (a[i] - b[i]).abs())
+      List<num>.generate(a.length, (i) => (a[i] - b[i]).abs())
           .fold(0.0, (a, b) => a + b);
 }
 
@@ -38,8 +34,8 @@ class _Location {
 ///
 /// Example:
 ///
-///     var a = new Instance([0, 3], id: "A"),
-///       b = new Instance([0, 3], id: "B");
+///     var a = Instance([0, 3], id: "A"),
+///       b = Instance([0, 3], id: "B");
 ///     print(a.distanceFrom(b));
 class Instance extends _Location {
   Instance(List<num> location, {this.id}) : super(location);
@@ -70,14 +66,14 @@ class Instance extends _Location {
 /// A cluster of instances.
 class Cluster extends _Location {
   Cluster(List<num> location, {this.id}) : super(location) {
-    instances = new List<Instance>();
+    instances = List<Instance>();
   }
   String id;
   List<Instance> instances;
 
   // returns true if shifted
   bool shift() {
-    var nextLocation = new List<num>.filled(location.length, 0.0);
+    var nextLocation = List<num>.filled(location.length, 0.0);
     int n = 0;
     instances.forEach((Instance instance) {
       for (int i = 0; i < instance.location.length; i++) {
@@ -86,7 +82,7 @@ class Cluster extends _Location {
       }
       n++;
     });
-    bool shifted = new List<bool>.generate(location.length,
+    bool shifted = List<bool>.generate(location.length,
             (i) => (location[i] - nextLocation[i]).abs() < precision)
         .any((x) => !x);
     location = nextLocation;
@@ -104,7 +100,7 @@ class Cluster extends _Location {
 /// associated probability proportional to the distance from the most
 /// recent cluster.
 List<Cluster> initialClusters(int k, List<Instance> instances, {int seed}) {
-  final Random rand = seed == null ? new Random() : new Random(seed);
+  final Random rand = seed == null ? Random() : Random(seed);
 
   Cluster nextCluster(Cluster prev, String id) {
     List<num> ds = instances
@@ -119,13 +115,12 @@ List<Cluster> initialClusters(int k, List<Instance> instances, {int seed}) {
       if (cum > r) break;
       instanceIndex++;
     }
-    return new Cluster(new List<num>.from(instances[instanceIndex].location),
-        id: id);
+    return Cluster(List<num>.from(instances[instanceIndex].location), id: id);
   }
 
   Cluster prev;
   var clusters =
-      new List<Cluster>.generate(k, (i) => nextCluster(prev, "cluster[$i]"));
+      List<Cluster>.generate(k, (i) => nextCluster(prev, "cluster[$i]"));
 
   instances.forEach((instance) {
     instance.reallocate(clusters);
@@ -146,9 +141,8 @@ Map<String, dynamic> kmeans(
     //print("...$clusters");
     clusters.forEach((cluster) {
       if (!info["cluster-motion"].containsKey(cluster.id))
-        info["cluster-motion"][cluster.id] = new List<List<num>>();
-      info["cluster-motion"][cluster.id]
-          .add(new List<num>.from(cluster.location));
+        info["cluster-motion"][cluster.id] = List<List<num>>();
+      info["cluster-motion"][cluster.id].add(List<num>.from(cluster.location));
     });
     if (shifted.every((x) => !x)) break;
     instances.forEach((Instance instance) {
