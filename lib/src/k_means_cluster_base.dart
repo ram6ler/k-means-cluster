@@ -131,7 +131,9 @@ List<Cluster> initialClusters(int k, List<Instance> instances, {int seed}) {
 /// Perform the kmeans algorithm.
 ///
 Map<String, dynamic> kmeans(
-    {int maxIterations: 10, List<Instance> instances, List<Cluster> clusters}) {
+    {int maxIterations = 10,
+    List<Instance> instances,
+    List<Cluster> clusters}) {
   var info = <String, dynamic>{};
   int i;
   info["cluster-motion"] = <String, List<List<num>>>{};

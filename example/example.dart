@@ -1,14 +1,11 @@
-// Copyright (c) 2017, Richard Ambler. All rights reserved. Use of this
-// source code is governed by a BSD-style license that can be found in the
-// LICENSE file.
-
 import 'dart:io';
 import 'package:k_means_cluster/k_means_cluster.dart';
 
 main() async {
   // Load the data from iris.csv; ignore header-line;
   // each line representes an instance of an iris.
-  List<String> lines = (await File("iris.csv").readAsLines()).sublist(1);
+  List<String> lines =
+      (await File("iris_data/iris.csv").readAsLines()).sublist(1);
 
   // Set the distance measure; this can be any function of the form
   // num f(List<num> a, List<num> b): a and b contain the coordinates

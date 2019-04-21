@@ -1,7 +1,7 @@
 name: k_means_cluster
-description: A simple implementation of k-means clustering.
-version: 0.2.1
-homepage: https://bitbucket.org/ram6ler/knn-cluster/wiki/Home
+description: A simple library for partitioning small to medium data sets into clusters using the k-means clustering algorithm.
+version: 0.2.2
+homepage: https://bitbucket.org/ram6ler/k_means_cluster/wiki/Home
 author: Richard Ambler <rambler@ibwya.net>
 
 environment:
