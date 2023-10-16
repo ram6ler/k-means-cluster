@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+- Housekeeping.
+- Spelling mistakes, dear Lord! (Breaking changes.)
+- Dart 3 ready.
+
 ## 0.2.1
 
 - Dart 2 ready
@@ -8,4 +14,4 @@
 
 - Initial version.
 - Basic knn-clustering.
-- Distance measures: square Euclidian, city block.
+- Distance measures: square Euclidean, city block.

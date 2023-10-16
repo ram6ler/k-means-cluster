@@ -29,24 +29,24 @@ main() async {
         t = 2 * pi * rand.nextDouble(),
         x = cx + r * cos(t),
         y = cy + r * sin(t);
-    return Instance([x, y], id: "[$i]");
+    return Instance(location: [x, y], id: "[$i]");
   });
 
   List<Cluster> clusters = initialClusters(3, instances, seed: 1);
 
   // plot the initial cluster positions and associated points
-  await File("0.svg").writeAsString(svg(clusters));
+  await File("example/stages/0.svg").writeAsString(svg(clusters));
 
   // track the progress of the algorithm; save a plot of each stage
   for (int i = 1; i <= 7; i++) {
-    kmeans(clusters: clusters, instances: instances, maxIterations: 1);
-    await File("$i.svg").writeAsString(svg(clusters));
+    kMeans(clusters: clusters, instances: instances, maxIterations: 1);
+    await File("example/stages/$i.svg").writeAsString(svg(clusters));
   }
 }
 
 // a simple svg-plot generator
 String svg(List<Cluster> clusters) {
-  var sb = StringBuffer('<svg width="250" height="250" viewBox="0 0 15 15">');
+  final sb = StringBuffer('<svg width="250" height="250" viewBox="0 0 15 15">');
   for (int i = 0; i < clusters.length; i++) {
     Cluster cluster = clusters[i];
     num x = cluster.location[0], y = cluster.location[1];

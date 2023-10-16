@@ -9,10 +9,10 @@ A clustering session typically involves:
 * Setting a distance measurement to use.
 
 ```dart
-distanceMeasure = DistanceType.squaredEuclidian; // default
+distanceMeasure = DistanceType.squaredEuclidean; // default
 ```
 
-* Creating a `List` of `Instance`s. This is generally done by mapping a list of whatever data structures is available.
+* Creating a `List` of `Instance`s. This is generally done by mapping from a list of whatever data structures is available.
 
 ```dart
 // For example, data might be a List<String> such
@@ -20,7 +20,7 @@ distanceMeasure = DistanceType.squaredEuclidian; // default
 List<Instance> instances = data.map((datum) {
   List<num> coordinates = ...;
   String id = ...;
-  return Instance(coordinates, id: id); 
+  return Instance(location: coordinates, id: id); 
 }).tolist();
 ```
 
@@ -30,10 +30,10 @@ List<Instance> instances = data.map((datum) {
 List<Cluster> clusters = initialClusters(3, instances, seed: 0);
 ```
 
-* Running the algorithm using the `kmeans` function. This is a side-effect heavy function that iteratively shifts the clusters towards the mean position of the associated instances and reassigns instances to the nearest cluster.
+* Running the algorithm using the `kMeans` function. This is a side-effect heavy function that iteratively shifts the clusters towards the mean position of the associated instances and reassigns instances to the nearest cluster.
 
 ```dart
-kmeans(clusters: clusters, instances: instances);
+kMeans(clusters: clusters, instances: instances);
 ```
 
 * Inspecting the `instances` property of each cluster.
@@ -45,13 +45,6 @@ clusters.forEach((cluster) {
     print("  - $instance");
   });
 });
-``` 
+```
 
-
-
-Please see the [associated wiki][wiki] for more details and examples.
-
-Please file feature requests and bugs at the [issue tracker][tracker].
-
-[wiki]: https://bitbucket.org/ram6ler/k_means_cluster/wiki/Home
-[tracker]: https://bitbucket.org/ram6ler/k_means_cluster/issues
+Please file feature requests and bugs at the [issue tracker](https://github.com/ram6ler/k-means-cluster/issues).

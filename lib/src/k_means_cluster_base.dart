@@ -1,13 +1,13 @@
 import 'dart:math' show Random;
 
-/// A function that resurns a distance measure between two points [a]
+/// A function that returns a distance measure between two points [a]
 /// and [b] in space.
 typedef num DistanceMeasure(List<num> a, List<num> b);
 
 /// A convenience container class that stores commonly used
 /// [DistanceMeasure] functions.
 abstract class DistanceType {
-  static DistanceMeasure squaredEuclidian = (List<num> a, List<num> b) =>
+  static DistanceMeasure squaredEuclidean = (List<num> a, List<num> b) =>
       List<num>.generate(a.length, (i) => (a[i] - b[i]) * (a[i] - b[i]))
           .fold(0.0, (a, b) => a + b);
   static DistanceMeasure cityBlock = (List<num> a, List<num> b) =>
@@ -19,34 +19,37 @@ abstract class DistanceType {
 /// if at least one of its coordinates has changed by more than
 /// this amount.
 num precision = 1E-6;
-DistanceMeasure distanceMeasure = DistanceType.squaredEuclidian;
+DistanceMeasure distanceMeasure = DistanceType.squaredEuclidean;
 
-class _Location {
-  _Location(this.location);
+class Location {
+  Location(this.location);
   List<num> location;
 
   /// Returns the distance, as defined by [distanceMeasure], between
   /// [this] and [that] item.
-  num distanceFrom(_Location that) => distanceMeasure(location, that.location);
+  num distanceFrom(Location that) => distanceMeasure(location, that.location);
 }
 
 /// An instance of data.
 ///
 /// Example:
 ///
-///     var a = Instance([0, 3], id: "A"),
-///       b = Instance([0, 3], id: "B");
+///     final a = Instance([0, 3], id: "A"),
+///       b = Instance([4, 5], id: "B");
 ///     print(a.distanceFrom(b));
-class Instance extends _Location {
-  Instance(List<num> location, {this.id}) : super(location);
+class Instance extends Location {
+  Instance({
+    required List<num> location,
+    required this.id,
+  }) : super(location);
   String id;
-  Cluster cluster;
+  Cluster? cluster;
 
   /// Associate [this] instance with the nearest cluster
   /// in [clusters].
   void reallocate(List<Cluster> clusters) {
-    num min;
-    Cluster argMin;
+    num? min;
+    late Cluster argMin;
     for (Cluster c in clusters) {
       num d = distanceFrom(c);
       if (min == null || min > d) {
@@ -54,9 +57,11 @@ class Instance extends _Location {
         argMin = c;
       }
     }
-    if (cluster != null) cluster.instances.remove(this);
+    if (cluster != null) {
+      cluster!.instances.remove(this);
+    }
     cluster = argMin;
-    cluster.instances.add(this);
+    cluster!.instances.add(this);
   }
 
   @override
@@ -64,10 +69,13 @@ class Instance extends _Location {
 }
 
 /// A cluster of instances.
-class Cluster extends _Location {
-  Cluster(List<num> location, {this.id}) : super(location) {
-    instances = List<Instance>();
-  }
+class Cluster extends Location {
+  Cluster({
+    required List<num> location,
+    required this.id,
+  })  : instances = <Instance>[],
+        super(location);
+
   String id;
   List<Instance> instances;
 
@@ -82,9 +90,13 @@ class Cluster extends _Location {
       }
       n++;
     });
-    bool shifted = List<bool>.generate(location.length,
-            (i) => (location[i] - nextLocation[i]).abs() < precision)
-        .any((x) => !x);
+    bool
+        shifted = /*List<bool>.generate(location.length,
+            (i) => (location[i] - nextLocation[i]).abs() < precision)*/
+        [
+      for (var i = 0; i < location.length; i++)
+        (location[i] - nextLocation[i]).abs() < precision
+    ].any((x) => !x);
     location = nextLocation;
     return shifted;
   }
@@ -99,10 +111,10 @@ class Cluster extends _Location {
 /// in [instances] a candidate for the next cluster position with an
 /// associated probability proportional to the distance from the most
 /// recent cluster.
-List<Cluster> initialClusters(int k, List<Instance> instances, {int seed}) {
+List<Cluster> initialClusters(int k, List<Instance> instances, {int? seed}) {
   final Random rand = seed == null ? Random() : Random(seed);
 
-  Cluster nextCluster(Cluster prev, String id) {
+  Cluster nextCluster(Cluster? prev, String id) {
     List<num> ds = instances
         .map((Instance instance) => prev?.distanceFrom(instance) ?? 1)
         .toList();
@@ -115,10 +127,13 @@ List<Cluster> initialClusters(int k, List<Instance> instances, {int seed}) {
       if (cum > r) break;
       instanceIndex++;
     }
-    return Cluster(List<num>.from(instances[instanceIndex].location), id: id);
+    return Cluster(
+      location: List<num>.from(instances[instanceIndex].location),
+      id: id,
+    );
   }
 
-  Cluster prev;
+  Cluster? prev;
   var clusters =
       List<Cluster>.generate(k, (i) => nextCluster(prev, "cluster[$i]"));
 
@@ -128,22 +143,22 @@ List<Cluster> initialClusters(int k, List<Instance> instances, {int seed}) {
   return clusters;
 }
 
-/// Perform the kmeans algorithm.
+/// Perform the k-means algorithm.
 ///
-Map<String, dynamic> kmeans(
-    {int maxIterations = 10,
-    List<Instance> instances,
-    List<Cluster> clusters}) {
+Map<String, dynamic> kMeans({
+  int maxIterations = 10,
+  required List<Instance> instances,
+  required List<Cluster> clusters,
+}) {
   var info = <String, dynamic>{};
   int i;
   info["cluster-motion"] = <String, List<List<num>>>{};
   for (i = 0; i < maxIterations; i++) {
     List<bool> shifted =
         clusters.map((Cluster cluster) => cluster.shift()).toList();
-    //print("...$clusters");
     clusters.forEach((cluster) {
       if (!info["cluster-motion"].containsKey(cluster.id))
-        info["cluster-motion"][cluster.id] = List<List<num>>();
+        info["cluster-motion"][cluster.id] = <List<num>>[];
       info["cluster-motion"][cluster.id].add(List<num>.from(cluster.location));
     });
     if (shifted.every((x) => !x)) break;

@@ -1,9 +1,8 @@
 name: k_means_cluster
 description: A simple library for partitioning small to medium data sets into clusters using the k-means clustering algorithm.
-version: 0.2.2
-homepage: https://bitbucket.org/ram6ler/k_means_cluster/wiki/Home
-author: Richard Ambler <rambler@ibwya.net>
+version: 0.3.0
+homepage: https://github.com/ram6ler/k-means-cluster
 
 environment:
-  sdk: '>=2.0.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
